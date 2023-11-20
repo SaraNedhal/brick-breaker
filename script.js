@@ -1,25 +1,40 @@
+// get button 
+// function newGame
+// add click event listener
+document.querySelector('.btn').addEventListener("click" , newGame)
+
+
+let isGameOn
+
 // get the canvas tag with an id of gameContainer using getElementById
 const gameContainer = document.getElementById('gameContainer');
 
 // to get access to the object that allows for javascript to draw graphics (this feature only available with using canvas)
 const context = gameContainer.getContext('2d');
-console.log(context);
+// console.log(context);
 
 //define some variables
 // get the width and height of the container and store them in variables respectively
 const containerWidth = parseInt(gameContainer.width);
 const containerHeight = parseInt(gameContainer.height);
 
-//ball
+
+
+
+
+function newGame(){
+  isGameOn = true
+
+
+  //ball
 // the radius of the circle, used inside a function that draw a circle -> context.arc()
 const ballRadius = 15;
 //define the x and y coordinate of the ball 
 let ballCoordinateX = containerWidth/2;
 let ballCoordinateY = containerHeight-55;
 //add vertical movement (positioning) and horizontal ->
-let ballDistanceX = 4;
-let ballDistanceY = -5;
-
+let ballDistanceX = 2;
+let ballDistanceY = -3;
 
 //paddle
 // define the width and height of the paddle 
@@ -40,9 +55,7 @@ const brickHeight = 30;
 let brickHorizontal = 15;
 let brickVertical = 20; 
 
-
-
-// first draw the ball 
+  // first draw the ball 
 function drawBall() {
   context.fillStyle = "red";
   context.beginPath();
@@ -67,11 +80,12 @@ context.fillRect(paddleCoordinateX ,paddleCoordinateY,paddleWidth,paddleHeight);
 
 // drawPaddle();
 
-// requestAnimationFrame(animate);
+const animation = requestAnimationFrame(animate);
 // animate()
 document.addEventListener("keydown", paddleMovement);
 // function used to move ball and paddle
 function animate() {
+  if(!isGameOn) return
   requestAnimationFrame(animate);
   context.clearRect(0,0,containerWidth,containerHeight)
   drawPaddle();
@@ -82,7 +96,6 @@ function animate() {
 
 }
 // setInterval(animate(), 10);
-
 //function that checks if paddle is out of the container 
 // it takes the new x coordinate of the paddle which is (the original paddle coordinate which is placed in the middle of the page subtracted (if paddle moved to left) from the paddleHorizontalMovement or added (if paddle moved to right) to the paddleHorizontalMovement the value that comes of either of these operations are considered to be the new x coordinate for the paddle (new position) )
 // to check if the paddle out of the container boundary -> need to check the top left point of the paddle and the top right of the paddle 
@@ -123,8 +136,8 @@ function drawBricks(){
           //in this loop, im going change the x and y coordinate of the bricks (DONT TOUCH THE WIDTH OR THE HEIGHT THEY R CONSTANT values)
           context.fillStyle = "blue";
          let bricks = context.fillRect(brickHorizontal,brickVertical,brickWidth,brickHeight);
-          console.log("this is a brick", context.bricks);
-          console.log(gameContainer.getBoundingClientRect());
+          // console.log("this is a brick", context.bricks);s
+          // console.log(gameContainer.getBoundingClientRect());
           //  console.log(brickVertical)
 
           brickHorizontal = brickHorizontal + 95
@@ -157,25 +170,31 @@ function moveBall(){
 
 // function used to detect the collision between the ball and the top, right, and left container
 function detectCollisionBallAndCanvasBorder(){
+  // if 
   if(ballCoordinateX < 0 || ballRadius + ballCoordinateX > containerWidth) {
     // ballDistanceY= ballDistanceY * -1;
     ballDistanceX= ballDistanceX *-1;
   }
   // celling
   if(ballCoordinateY <= 0 ) {
-    ballDistanceY= ballDistanceY * -1;
     ballDistanceY= ballDistanceY *-1;
   }
 
   if(ballCoordinateY > containerHeight) {
-    alert("game over");
+gameOver()
+    
   }
 
   
 
 }
 
-[
-  {},
-  {},
-]
+function gameOver() {
+  isGameOn = false
+  // alert("game over");
+    // cancelAnimationFrame(animation)
+
+}
+
+
+}
