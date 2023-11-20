@@ -1,7 +1,7 @@
 // get button 
 // function newGame
 // add click event listener
-document.querySelector('.btn').addEventListener("click" , newGame)
+document.querySelector('.btn').addEventListener("click" , newGame);
 
 
 let isGameOn
@@ -33,7 +33,7 @@ const ballRadius = 15;
 let ballCoordinateX = containerWidth/2;
 let ballCoordinateY = containerHeight-55;
 //add vertical movement (positioning) and horizontal ->
-let ballDistanceX = 2;
+let ballDistanceX = 3;
 let ballDistanceY = -3;
 
 //paddle
@@ -93,6 +93,7 @@ function animate() {
   drawBricks();
   moveBall()
   detectCollisionBallAndCanvasBorder()
+  detectCollisionBallAndPaddle()
 
 }
 // setInterval(animate(), 10);
@@ -170,17 +171,18 @@ function moveBall(){
 
 // function used to detect the collision between the ball and the top, right, and left container
 function detectCollisionBallAndCanvasBorder(){
-  // if 
-  if(ballCoordinateX < 0 || ballRadius + ballCoordinateX > containerWidth) {
+  // first condition: right border / second condition: left border
+  if(ballCoordinateX + ballDistanceX < 0 ||  ballCoordinateX + ballDistanceX > containerWidth-  ballRadius) {
     // ballDistanceY= ballDistanceY * -1;
     ballDistanceX= ballDistanceX *-1;
   }
-  // celling
-  if(ballCoordinateY <= 0 ) {
+  // top border
+  if(ballCoordinateY + ballDistanceY < 0 ) {
     ballDistanceY= ballDistanceY *-1;
   }
-
-  if(ballCoordinateY > containerHeight) {
+// if the ball y coordinate + the change of y coordinate is greater than the height of the container minus the ball radius because the edge of the ball need to touch the bottom border not half of the ball 
+//bottom border
+  if(ballCoordinateY + ballDistanceY > containerHeight-ballRadius ) {
 gameOver()
     
   }
@@ -188,7 +190,14 @@ gameOver()
   
 
 }
+console.log(paddleCoordinateX + paddleWidth)
+function detectCollisionBallAndPaddle() {
 
+  if(ballCoordinateX > paddleCoordinateX  && ballCoordinateX + ballRadius < paddleCoordinateX + paddleWidth && ballCoordinateY + ballRadius> paddleCoordinateY ) {
+    ballDistanceY = ballDistanceY*-1;
+
+  }
+}
 function gameOver() {
   isGameOn = false
   // alert("game over");

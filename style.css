@@ -15,4 +15,10 @@ margin: 0 auto;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-decoration: none;
+  padding:10px;
+  background-color: chartreuse;
+  font-size: 20px;
+  font-weight: bold;
+
 }
