@@ -34,7 +34,7 @@ let ballCoordinateX = containerWidth/2;
 let ballCoordinateY = containerHeight-55;
 //add vertical movement (positioning) and horizontal ->
 let ballDistanceX = 3;
-let ballDistanceY = -3;
+let ballDistanceY = -4;
 
 //paddle
 // define the width and height of the paddle 
@@ -48,12 +48,15 @@ const paddleHorizontalMovement = 15;
 
 //bricks
 // define the width and height of each brick
-const brickWidth = 90;
-const brickHeight = 30;
+const brickWidth = 80;
+const brickHeight = 20;
 
 // define variables for the x and y coordinates of the starting brick 
-let brickHorizontal = 15;
-let brickVertical = 20; 
+let brickCoordinateX = 15;
+let brickCoordinateY = 20; 
+
+//define array for bricks generation to store its x,y, and if they r broken or not
+let bricksArray= [];
 
   // first draw the ball 
 function drawBall() {
@@ -77,10 +80,11 @@ context.fillStyle = "green"
 context.fillRect(paddleCoordinateX ,paddleCoordinateY,paddleWidth,paddleHeight);
 }
 
+generate(30);
 
 // drawPaddle();
 
-const animation = requestAnimationFrame(animate);
+ requestAnimationFrame(animate);
 // animate()
 document.addEventListener("keydown", paddleMovement);
 // function used to move ball and paddle
@@ -88,12 +92,13 @@ function animate() {
   if(!isGameOn) return
   requestAnimationFrame(animate);
   context.clearRect(0,0,containerWidth,containerHeight)
+  drawBricks();
   drawPaddle();
   drawBall();
-  drawBricks();
   moveBall()
   detectCollisionBallAndCanvasBorder()
   detectCollisionBallAndPaddle()
+  detectCollisionBallAndBrick()
 
 }
 // setInterval(animate(), 10);
@@ -125,34 +130,77 @@ function paddleMovement(event) {
   }
 }
 // generate bricks
+function generate(numberOfBricks){
+
+  for(let i = 0 ; i < numberOfBricks ; i++) {
+    const brick = 
+    {
+      x: brickCoordinateX,
+      y: brickCoordinateY,
+      broken: false
+    }
+    bricksArray.push(brick);
+    brickCoordinateX = brickCoordinateX + 95
+    
+
+    if((i+1)%6==0){
+      brickCoordinateY += 40;
+      brickCoordinateX = 15
+      }
+  }
+}
+
+// draw bricks
 function drawBricks(){
-  // create 40 bricks 
-  // loop 40 times
-  for(let i = 0 ; i < 30 ; i++) {
-        //calc x/y of brick
-        // let brickX = brickHorizontal + brickWidth
+  // // // create 40 bricks 
+  // // // loop 40 times
+  // for(let i = 0 ; i < 30 ; i++) {
+  //       //calc x/y of brick
+  //       // let brickX = brickCoordinateX + brickWidth
     
        
-          //create brick
-          //in this loop, im going change the x and y coordinate of the bricks (DONT TOUCH THE WIDTH OR THE HEIGHT THEY R CONSTANT values)
-          context.fillStyle = "blue";
-         let bricks = context.fillRect(brickHorizontal,brickVertical,brickWidth,brickHeight);
-          // console.log("this is a brick", context.bricks);s
-          // console.log(gameContainer.getBoundingClientRect());
-          //  console.log(brickVertical)
-
-          brickHorizontal = brickHorizontal + 95
-          // brickVertical = brickVertical + 20
-
-          // console.log("brickVertical", brickVertical)
+  //         //create brick
+  //         //in this loop, im going change the x and y coordinate of the bricks (DONT TOUCH THE WIDTH OR THE HEIGHT THEY R CONSTANT values)
+  //         context.beginPath();
+  //         context.fillStyle = "blue";
+  //        context.fillRect(brickCoordinateX,brickCoordinateY,brickWidth,brickHeight);
+  //         // console.log("this is a brick", context.bricks);s
+  //         // console.log(gameContainer.getBoundingClientRect());
+  //         //  console.log(brickCoordinateY)
+  //         context.fill();
+  //         context.closePath();
 
 
-          if((i+1)%6==0){
-            brickVertical += 40;
-            brickHorizontal = 15
-          }
+  //         const brick = 
+  //         {
+  //           x: brickCoordinateX,
+  //           y: brickCoordinateY,
+  //           broken: false
+  //         }
+  //         bricksArray.push(brick);
+  //         brickCoordinateX = brickCoordinateX + 95
+  //         // brickCoordinateY = brickCoordinateY + 20
+
+  //         // console.log("brickCoordinateY", brickCoordinateY)
+
+  //         if((i+1)%6==0){
+  //           brickCoordinateY += 40;
+  //           brickCoordinateX = 15
+  //         }
        
-  }
+  // }
+  bricksArray.forEach(function(element){
+    if(element.broken !== false ) {return "nothing"};
+    context.beginPath();
+    context.fillStyle = "blue";
+    context.fillRect(element.x,element.y,brickWidth,brickHeight);
+    context.fill();
+    context.closePath();
+
+  }) 
+  // console.log(bricksArray);
+    
+  
 
 }
 // drawBricks();
@@ -182,7 +230,7 @@ function detectCollisionBallAndCanvasBorder(){
   }
 // if the ball y coordinate + the change of y coordinate is greater than the height of the container minus the ball radius because the edge of the ball need to touch the bottom border not half of the ball 
 //bottom border
-  if(ballCoordinateY + ballDistanceY > containerHeight-ballRadius ) {
+  if(ballCoordinateY + ballRadius > containerHeight ) {
 gameOver()
     
   }
@@ -190,13 +238,85 @@ gameOver()
   
 
 }
-console.log(paddleCoordinateX + paddleWidth)
+// console.log(paddleCoordinateX + paddleWidth)
 function detectCollisionBallAndPaddle() {
-
-  if(ballCoordinateX > paddleCoordinateX  && ballCoordinateX + ballRadius < paddleCoordinateX + paddleWidth && ballCoordinateY + ballRadius> paddleCoordinateY ) {
-    ballDistanceY = ballDistanceY*-1;
+  
+  if(
+    // if the x coordinate of the ball + the ball radius (so means the entire ball/circle) is greater or equal than paddle x coordinate (top left corner) then reverse/flip the y coordinate  of the ball (left side of paddle)
+     ballCoordinateX + ballRadius >= paddleCoordinateX  &&
+     //if the x coordinate of the ball - the ball radius (checking right side of the paddle) is less than x paddle coordinate + paddle's width (checking the paddle width and the paddle top right corner) than flip y coordinate of the ball (right side of paddle)
+     ballCoordinateX - ballRadius  <= paddleCoordinateX + paddleWidth && 
+     //if the ball 
+     ballCoordinateY + ballRadius >=  paddleCoordinateY &&
+     ballCoordinateY - ballRadius  <= paddleCoordinateY + paddleHeight
+     ) {
+    ballCoordinateY += -5
+      ballDistanceY  = ballDistanceY*-1;
+    console.log("Y rate",ballDistanceY < 0);
 
   }
+}
+
+// function for detecting the collision between ball and brick
+function detectCollisionBallAndBrick(){
+
+  // const filteredBrickArray = bricksArray.filter(function(theBrick) {
+  //   return theBrick.broken == false;
+  // });
+  bricksArray.filter(brick => !brick.broken).forEach(brick =>{
+    // if(ballCoordinateY + ballRadius > brick.y && ballCoordinateY - ballRadius < brick.y + brickHeight) {
+    //   console.log(brick);
+    //   ballDistanceY*=-1;
+    //   brick.broken = true;
+    //   console.log("update broken", brick);
+    //   context.clearRect(brick.x,brick.y,brickWidth, brickHeight);
+    // }
+
+    // right and left 
+    if(
+      ballCoordinateX + ballRadius > brick.x && 
+      ballCoordinateX - ballRadius < brick.x + brickWidth && 
+      ballCoordinateY + ballRadius > brick.y && 
+      ballCoordinateY - ballRadius < brick.y + brickHeight) {
+      console.log(brick);
+      ballDistanceY*=-1;
+      // ballDistanceX*=-1;
+      brick.broken = true;
+      context.clearRect(brick.x,brick.y,brickWidth, brickHeight);
+      console.log("update broken", brick);  
+    }
+   
+    
+  })
+let counter =0
+for(let i = 0; i < bricksArray.length ; i++) {
+ if(bricksArray[i].broken == true) {
+    counter++;
+ }
+
+}
+if(counter == 30) {
+  gameOver()
+}
+
+
+
+// left collision 
+// if(ballCoordinateX + ballRadius > brickCoordinateX && ballCoordinateX - ballRadius > brickCoordinateX + brickWidth) {
+//   ballDistanceX*=-1;
+//   // bricksArray.broken = true;
+//   // if(bricksArray.broken == true) {
+//   //   context.clearRect(bricksArray[0].x,bricksArray[1],y,0,0)
+//   // }
+
+// }
+
+// // right collision 
+// if() {
+//   ballDistanceX*=-1;
+// }
+  // console.log(filteredBrickArray);
+
 }
 function gameOver() {
   isGameOn = false
