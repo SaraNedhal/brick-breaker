@@ -114,6 +114,12 @@ function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle){
 
 function gameOver() {
   isGameOn = false
+  if(currentPlayer == 1){
+    currentPlayer = 2
+  }
+  else{
+    currentPlayer = 1
+  }
   return isGameOn;
 }
 
@@ -124,22 +130,34 @@ function gameOver() {
 //   // else if(gameOver()){
 //   //     return "nothing"
 //   // }
-if(currentPlayer==2) {
-  // document.location.reload();
-  // cancelAnimationFrame(animate);
-  newGame();
-}
+// if(currentPlayer==2) {
+//   // document.location.reload();
+//   // cancelAnimationFrame(animate);
+//   setUp();
+//   newGame();
+// }
 
 //setup function to reset the game 
 function setUp(){
    drawBall();
    drawPaddle();
   movePaddle();
-  
+  // currentPlayer=1;
 }// end of setUp() function
 
 //function to start the game
 function newGame(){
+  //set score for both players to 0
+  // console.log()
+  scorePlayer1 =0;
+  scorePlayer2 = 0;
+  document.querySelector('#playerScore').innerText = 0;
+
+  if(currentPlayer == 1) {
+    document.querySelector('#currentPlayer').innerText = 1;
+  }else{
+    document.querySelector('#currentPlayer').innerText = 2;
+  }
   isGameOn = true
 
 //define the x and y coordinate of the ball 
@@ -246,9 +264,6 @@ function detectCollisionBallAndCanvasBorder(){
 //bottom border
   if(ballCoordinateY + ballRadius > containerHeight ) {
 gameOver()
-currentPlayer=2;
-document.querySelector('#currentPlayer').innerText = currentPlayer;
-
   }  
 
 }
@@ -302,13 +317,14 @@ function detectCollisionBallAndBrick(){
         // console.log(scorePlayer1);
         document.querySelector('#playerScore').innerText = scorePlayer1;
         localStorage.setItem("score player 1", scorePlayer1);
+        // scorePlayer2=0;
       }
       // else if the current player is 2 then increase player 2 score by 1
       else {
+        // scorePlayer1=0;
         scorePlayer2++;
         document.querySelector('#playerScore').innerText = scorePlayer2;
         localStorage.setItem("score player 2", scorePlayer2);
-
       }
       context.clearRect(brick.x,brick.y,brickWidth, brickHeight);
     }
@@ -332,15 +348,13 @@ for(let i = 0; i < bricksArray.length ; i++) {
 // if all bricks has been hit end the game
 if(counter == numberOfBricks) {
   gameOver()
-  currentPlayer=2;
-  document.querySelector('#currentPlayer').innerText = currentPlayer;
-
+  
 }
 
 }
 
 // function to calculate the score of the current player
-function calculateScore(scoreOfTheCurrentPlayer) {
+function calculateScore() {
 
 }
 
