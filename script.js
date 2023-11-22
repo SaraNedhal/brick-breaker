@@ -3,7 +3,7 @@
 // add click event listener
 document.querySelector('.btn').addEventListener("click" , newGame);
 
-
+// boolean value to check if the game ended or not
 let isGameOn;
 
 // get the canvas tag with an id of gameContainer using getElementById
@@ -25,102 +25,63 @@ let currentPlayer = 1;
 let scorePlayer1 =0;
 let scorePlayer2 = 0;
 
-//function to start the game
-function newGame(){
-  isGameOn = true
-
-
   //ball
 // the radius of the circle, used inside a function that draw a circle -> context.arc()
 const ballRadius = 15;
 //define the x and y coordinate of the ball 
-let ballCoordinateX = containerWidth/2;
-let ballCoordinateY = containerHeight-55;
+let ballCoordinateX ;
+let ballCoordinateY ;
 //add vertical movement (positioning) and horizontal ->
-let ballDistanceX = 3;
-let ballDistanceY = -4;
+let ballDistanceX;
+let ballDistanceY;
 
 //paddle
 // define the width and height of the paddle 
 const paddleWidth = 150;
 const paddleHeight = 20;
 //define the x and y coordinate of the paddle
-let paddleCoordinateX = containerWidth/2 - paddleWidth/2;
-let paddleCoordinateY = containerHeight-40;
+let paddleCoordinateX;
+let paddleCoordinateY;
 //define a variable for the difference in the x-axis position of the paddle (basically setting a value for the paddle horizontal movement so if the paddle moves to the right it will move according to the specified value and same goes for the left)
 const paddleHorizontalMovement = 15;
 
 //bricks
+//set number of bricks
+const numberOfBricks = 30;
 // define the width and height of each brick
 const brickWidth = 80;
 const brickHeight = 20;
-
 // define variables for the x and y coordinates of the starting brick 
-let brickCoordinateX = 15;
-let brickCoordinateY = 40; 
+let brickCoordinateX;
+let brickCoordinateY;
 
-//define array for bricks generation to store its x,y, and if they r broken or not
-let bricksArray= [];
+//functions
+  
+// first draw the ball 
+   function drawBall() {
+    context.fillStyle = "red";
+    context.beginPath();
+    // arc() accepts 5 arguments (x coordinate,y coordinate, circle radius, start angel, end angle)
+    // x-> ball must be centered horizontally on the x axis (thus, containerWidth/ , and on Y axis i dont want the ball to be placed at the bottom of the canvas so i subtracted the height to value i found it suitable ), for ball radius is stored as a variable and hold the value 15 ,start drawing at angle 0 and do a 360deg meaning a full circle hence Math.PI *2
+    context.arc(ballCoordinateX,ballCoordinateY,ballRadius,0, Math.PI *2);
+    context.fill()
+  }
 
-//set number of bricks
-const numberOfBricks = 30;
+  
+  //function used to draw paddle
+  function drawPaddle(){
+    context.fillStyle = "green"
+    // fillRect() is a function inside the context object , it accepts 4 arguments (x coordinate,y coordinate,width,height)
+    // so for the x coordinate i want the paddle to be placed horizontally at center -> take the whole canvas width and divide it over 2 and for the height i want at the bottom of the container but i want a padding so i will set the height to the canvas height and subtract it from a specific number of px to move it up, in this case subtract 40px from canvas height. And for the third and fourth argument which are paddle width , and paddle height these values are already specified the width and height of the rectangle (paddle) respectively
+    // with all these values the fillRect will draw the rectangle (paddle)
+    // but there is an issue with the paddle placement the (x,y) coordinates starts at the center of the page and draw the rectangle but the rectangle must be centered so the ball in top of it must be in the middle of the paddle so in x coordinate subtract paddleWidth/2 from containerWidth/2 to move the paddle half of its width to the left and with that the paddle is exactly centred and the ball sits perfectly at the top of the paddle
+    context.fillRect(paddleCoordinateX ,paddleCoordinateY,paddleWidth,paddleHeight);
+    }
 
-  // first draw the ball 
-function drawBall() {
-  context.fillStyle = "red";
-  context.beginPath();
-  // arc() accepts 5 arguments (x coordinate,y coordinate, circle radius, start angel, end angle)
-  // x-> ball must be centered horizontally on the x axis (thus, containerWidth/ , and on Y axis i dont want the ball to be placed at the bottom of the canvas so i subtracted the height to value i found it suitable ), for ball radius is stored as a variable and hold the value 15 ,start drawing at angle 0 and do a 360deg meaning a full circle hence Math.PI *2
-  context.arc(ballCoordinateX,ballCoordinateY,ballRadius,0, Math.PI *2);
-  context.fill()
-}
-// call the drawBall() function to draw the ball
-// drawBall();
-
-//function used to draw paddle
-function drawPaddle(){
-context.fillStyle = "green"
-// fillRect() is a function inside the context object , it accepts 4 arguments (x coordinate,y coordinate,width,height)
-// so for the x coordinate i want the paddle to be placed horizontally at center -> take the whole canvas width and divide it over 2 and for the height i want at the bottom of the container but i want a padding so i will set the height to the canvas height and subtract it from a specific number of px to move it up, in this case subtract 40px from canvas height. And for the third and fourth argument which are paddle width , and paddle height these values are already specified the width and height of the rectangle (paddle) respectively
-// with all these values the fillRect will draw the rectangle (paddle)
-// but there is an issue with the paddle placement the (x,y) coordinates starts at the center of the page and draw the rectangle but the rectangle must be centered so the ball in top of it must be in the middle of the paddle so in x coordinate subtract paddleWidth/2 from containerWidth/2 to move the paddle half of its width to the left and with that the paddle is exactly centred and the ball sits perfectly at the top of the paddle
-context.fillRect(paddleCoordinateX ,paddleCoordinateY,paddleWidth,paddleHeight);
-}
-
-// generate bricks with its coordinates
-generateBricksCoordinate(numberOfBricks);
-
-//adding animation (kinda like a loop)
- requestAnimationFrame(animate);
-// animate()
-
-//add eventlistener when the keyboard is clicked, execute the movePaddle function to move the paddle
+  //add eventlistener when the keyboard is clicked, execute the movePaddle function to move the paddle
 document.addEventListener("keydown", movePaddle);
 
-// function used to move ball and paddle
-function animate() {
-  if(!isGameOn) {return};
-  requestAnimationFrame(animate);
-  context.clearRect(0,0,containerWidth,containerHeight)
-  drawBricks();
-  drawPaddle();
-  drawBall();
-  moveBall();
-  detectCollisionBallAndCanvasBorder();
-  detectCollisionBallAndPaddle();
-  detectCollisionBallAndBrick();
-
-}
-//function that checks if paddle is out of the container 
-// it takes the new x coordinate of the paddle which is (the original paddle coordinate which is placed in the middle of the page subtracted (if paddle moved to left) from the paddleHorizontalMovement or added (if paddle moved to right) to the paddleHorizontalMovement the value that comes of either of these operations are considered to be the new x coordinate for the paddle (new position) )
-// to check if the paddle out of the container boundary -> need to check the top left point of the paddle and the top right of the paddle 
-//if the top left point of the paddle which is the  x coordinate of the paddle (the value given in the parameter) is less than zero (where zero is the starting point at the canvas) then the paddle is out of bounds from the left side
-// or also check for the top right corner of the paddle which is the x coordinate of the paddle plus the paddle's width (x+paddle width) this value give us x coordinate of the top right corner of the paddle. if it is greater than the container width (which is the right side of canvas , full canvas width)
-function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle){
-  return(horizontalCoordinateOfPaddle<0 ||horizontalCoordinateOfPaddle+ paddleWidth > containerWidth);
-} 
-
-//function responsible for moving the paddle right or left based on which arrow key is clicked
+    //function responsible for moving the paddle right or left based on which arrow key is clicked
 function movePaddle(event) {
   //left button is pressed
   if(event.keyCode == '37') {
@@ -140,6 +101,92 @@ function movePaddle(event) {
   }
   }
 }
+
+
+//function that checks if paddle is out of the container 
+// it takes the new x coordinate of the paddle which is (the original paddle coordinate which is placed in the middle of the page subtracted (if paddle moved to left) from the paddleHorizontalMovement or added (if paddle moved to right) to the paddleHorizontalMovement the value that comes of either of these operations are considered to be the new x coordinate for the paddle (new position) )
+// to check if the paddle out of the container boundary -> need to check the top left point of the paddle and the top right of the paddle 
+//if the top left point of the paddle which is the  x coordinate of the paddle (the value given in the parameter) is less than zero (where zero is the starting point at the canvas) then the paddle is out of bounds from the left side
+// or also check for the top right corner of the paddle which is the x coordinate of the paddle plus the paddle's width (x+paddle width) this value give us x coordinate of the top right corner of the paddle. if it is greater than the container width (which is the right side of canvas , full canvas width)
+function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle){
+  return(horizontalCoordinateOfPaddle<0 ||horizontalCoordinateOfPaddle+ paddleWidth > containerWidth);
+} 
+
+function gameOver() {
+  isGameOn = false
+  return isGameOn;
+}
+
+// if(gameOver() && currentPlayer == 2){
+//     document.querySelector('#currentPlayer').innerText = currentPlayer;
+//     newGame();
+//   }
+//   // else if(gameOver()){
+//   //     return "nothing"
+//   // }
+if(currentPlayer==2) {
+  // document.location.reload();
+  // cancelAnimationFrame(animate);
+  newGame();
+}
+
+//setup function to reset the game 
+function setUp(){
+   drawBall();
+   drawPaddle();
+  movePaddle();
+  
+}// end of setUp() function
+
+//function to start the game
+function newGame(){
+  isGameOn = true
+
+//define the x and y coordinate of the ball 
+ballCoordinateX = containerWidth/2;
+ballCoordinateY = containerHeight-55;
+//add vertical movement (positioning) and horizontal ->
+ballDistanceX = 3;
+ballDistanceY = -4;
+
+//define the x and y coordinate of the paddle
+paddleCoordinateX = containerWidth/2 - paddleWidth/2;
+paddleCoordinateY = containerHeight-40;
+
+// define variables for the x and y coordinates of the starting brick 
+brickCoordinateX = 15;
+brickCoordinateY = 40; 
+
+//define array for bricks generation to store its x,y, and if they r broken or not
+let bricksArray= [];
+
+
+
+// generate bricks with its coordinates
+generateBricksCoordinate(numberOfBricks);
+
+//adding animation (kinda like a loop)
+ requestAnimationFrame(animate);
+// animate()
+
+
+
+// function used to move ball and paddle
+function animate() {
+  if(!isGameOn) {return};
+  requestAnimationFrame(animate);
+  context.clearRect(0,0,containerWidth,containerHeight)
+  drawBricks();
+  drawPaddle();
+  drawBall();
+  moveBall();
+  detectCollisionBallAndCanvasBorder();
+  detectCollisionBallAndPaddle();
+  detectCollisionBallAndBrick();
+
+}
+
+
 // function to generate Bricks Coordinate 
 function generateBricksCoordinate(bricksNumber){
 
@@ -147,7 +194,7 @@ function generateBricksCoordinate(bricksNumber){
     const brick = 
     {
       x: brickCoordinateX,
-      y: brickCoordinateY,
+      y: brickCoordinateY,                                                                            
       broken: false
     }
     bricksArray.push(brick);
@@ -202,9 +249,7 @@ gameOver()
 currentPlayer=2;
 document.querySelector('#currentPlayer').innerText = currentPlayer;
 
-  }
-
-  
+  }  
 
 }
 // console.log(paddleCoordinateX + paddleWidth)
@@ -306,23 +351,7 @@ function calculateScore(scoreOfTheCurrentPlayer) {
 
 
 // }
-function gameOver() {
-  isGameOn = false
-  return isGameOn;
-}
 
-// if(gameOver() && currentPlayer == 2){
-//     document.querySelector('#currentPlayer').innerText = currentPlayer;
-//     newGame();
-//   }
-//   // else if(gameOver()){
-//   //     return "nothing"
-//   // }
-if(currentPlayer==2) {
-  // document.location.reload();
-  // cancelAnimationFrame(animate);
-  newGame();
-}
 
 }
 
