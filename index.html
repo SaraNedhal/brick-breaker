@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brick Breaker</title>
-  <link href="./style.css" rel="stylesheet">
-</head>
-<body>
-  <canvas id="gameContainer" width="600" height="500"></canvas>
-<a href="#" class="btn">Start game</a>  
-<script src="./script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brick Breaker</title>
+    <link href="./style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="playerPanel">
+      <div class="player">Player: <span id="currentPlayer">1</span></div>
+      <a href="#" class="btn">Start game</a>
+      <div class="score">Score: <span id="playerScore">0</span></div>
+    </div>
+
+    <canvas id="gameContainer" width="600" height="500"></canvas>
+    <script src="./script.js"></script>
+  </body>
 </html>

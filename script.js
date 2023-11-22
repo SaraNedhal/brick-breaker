@@ -4,7 +4,7 @@
 document.querySelector('.btn').addEventListener("click" , newGame);
 
 
-let isGameOn
+let isGameOn;
 
 // get the canvas tag with an id of gameContainer using getElementById
 const gameContainer = document.getElementById('gameContainer');
@@ -18,10 +18,14 @@ const context = gameContainer.getContext('2d');
 const containerWidth = parseInt(gameContainer.width);
 const containerHeight = parseInt(gameContainer.height);
 
+// define variable for the current player
+let currentPlayer = 1;
 
+//define a score for the player 1 and player 2
+let scorePlayer1 =0;
+let scorePlayer2 = 0;
 
-
-
+//function to start the game
 function newGame(){
   isGameOn = true
 
@@ -53,10 +57,13 @@ const brickHeight = 20;
 
 // define variables for the x and y coordinates of the starting brick 
 let brickCoordinateX = 15;
-let brickCoordinateY = 20; 
+let brickCoordinateY = 40; 
 
 //define array for bricks generation to store its x,y, and if they r broken or not
 let bricksArray= [];
+
+//set number of bricks
+const numberOfBricks = 30;
 
   // first draw the ball 
 function drawBall() {
@@ -80,28 +87,30 @@ context.fillStyle = "green"
 context.fillRect(paddleCoordinateX ,paddleCoordinateY,paddleWidth,paddleHeight);
 }
 
-generate(30);
+// generate bricks with its coordinates
+generateBricksCoordinate(numberOfBricks);
 
-// drawPaddle();
-
+//adding animation (kinda like a loop)
  requestAnimationFrame(animate);
 // animate()
-document.addEventListener("keydown", paddleMovement);
+
+//add eventlistener when the keyboard is clicked, execute the movePaddle function to move the paddle
+document.addEventListener("keydown", movePaddle);
+
 // function used to move ball and paddle
 function animate() {
-  if(!isGameOn) return
+  if(!isGameOn) {return};
   requestAnimationFrame(animate);
   context.clearRect(0,0,containerWidth,containerHeight)
   drawBricks();
   drawPaddle();
   drawBall();
-  moveBall()
-  detectCollisionBallAndCanvasBorder()
-  detectCollisionBallAndPaddle()
-  detectCollisionBallAndBrick()
+  moveBall();
+  detectCollisionBallAndCanvasBorder();
+  detectCollisionBallAndPaddle();
+  detectCollisionBallAndBrick();
 
 }
-// setInterval(animate(), 10);
 //function that checks if paddle is out of the container 
 // it takes the new x coordinate of the paddle which is (the original paddle coordinate which is placed in the middle of the page subtracted (if paddle moved to left) from the paddleHorizontalMovement or added (if paddle moved to right) to the paddleHorizontalMovement the value that comes of either of these operations are considered to be the new x coordinate for the paddle (new position) )
 // to check if the paddle out of the container boundary -> need to check the top left point of the paddle and the top right of the paddle 
@@ -110,7 +119,9 @@ function animate() {
 function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle){
   return(horizontalCoordinateOfPaddle<0 ||horizontalCoordinateOfPaddle+ paddleWidth > containerWidth);
 } 
-function paddleMovement(event) {
+
+//function responsible for moving the paddle right or left based on which arrow key is clicked
+function movePaddle(event) {
   //left button is pressed
   if(event.keyCode == '37') {
     // take the original x coordinate of the paddle (which is in the middle of the container) and subtract it from the horizontal movement (distance) store the value inside the variable newPaddleXCoordinate and then pass this value to the isPaddleOutOfCanvas function if it returns false, store the new x coordinate of the paddle inside paddleCoordinateX variable which is the paddle x coordinate in the canvas
@@ -129,10 +140,10 @@ function paddleMovement(event) {
   }
   }
 }
-// generate bricks
-function generate(numberOfBricks){
+// function to generate Bricks Coordinate 
+function generateBricksCoordinate(bricksNumber){
 
-  for(let i = 0 ; i < numberOfBricks ; i++) {
+  for(let i = 0 ; i < bricksNumber ; i++) {
     const brick = 
     {
       x: brickCoordinateX,
@@ -144,52 +155,15 @@ function generate(numberOfBricks){
     
 
     if((i+1)%6==0){
-      brickCoordinateY += 40;
-      brickCoordinateX = 15
+      brickCoordinateY += 45;
+      brickCoordinateX= 15
       }
   }
 }
 
 // draw bricks
 function drawBricks(){
-  // // // create 40 bricks 
-  // // // loop 40 times
-  // for(let i = 0 ; i < 30 ; i++) {
-  //       //calc x/y of brick
-  //       // let brickX = brickCoordinateX + brickWidth
-    
-       
-  //         //create brick
-  //         //in this loop, im going change the x and y coordinate of the bricks (DONT TOUCH THE WIDTH OR THE HEIGHT THEY R CONSTANT values)
-  //         context.beginPath();
-  //         context.fillStyle = "blue";
-  //        context.fillRect(brickCoordinateX,brickCoordinateY,brickWidth,brickHeight);
-  //         // console.log("this is a brick", context.bricks);s
-  //         // console.log(gameContainer.getBoundingClientRect());
-  //         //  console.log(brickCoordinateY)
-  //         context.fill();
-  //         context.closePath();
-
-
-  //         const brick = 
-  //         {
-  //           x: brickCoordinateX,
-  //           y: brickCoordinateY,
-  //           broken: false
-  //         }
-  //         bricksArray.push(brick);
-  //         brickCoordinateX = brickCoordinateX + 95
-  //         // brickCoordinateY = brickCoordinateY + 20
-
-  //         // console.log("brickCoordinateY", brickCoordinateY)
-
-  //         if((i+1)%6==0){
-  //           brickCoordinateY += 40;
-  //           brickCoordinateX = 15
-  //         }
-       
-  // }
-  bricksArray.forEach(function(element){
+    bricksArray.forEach(function(element){
     if(element.broken !== false ) {return "nothing"};
     context.beginPath();
     context.fillStyle = "blue";
@@ -197,17 +171,9 @@ function drawBricks(){
     context.fill();
     context.closePath();
 
-  }) 
-  // console.log(bricksArray);
-    
-  
+  })  
 
 }
-// drawBricks();
-// function used to detect any Collision between the ball and the brick
-// function detectCollision(){
-
-// }
 
 // function used to move the ball on the canvas
 // inside the function it takes both the original x and y coordinates of the ball and add to it ballDistanceX and ballDistanceY respectively which is the new x and y coordinates of the ball  
@@ -229,10 +195,13 @@ function detectCollisionBallAndCanvasBorder(){
     ballDistanceY= ballDistanceY *-1;
   }
 // if the ball y coordinate + the change of y coordinate is greater than the height of the container minus the ball radius because the edge of the ball need to touch the bottom border not half of the ball 
+
 //bottom border
   if(ballCoordinateY + ballRadius > containerHeight ) {
 gameOver()
-    
+currentPlayer=2;
+document.querySelector('#currentPlayer').innerText = currentPlayer;
+
   }
 
   
@@ -252,7 +221,7 @@ function detectCollisionBallAndPaddle() {
      ) {
     ballCoordinateY += -5
       ballDistanceY  = ballDistanceY*-1;
-    console.log("Y rate",ballDistanceY < 0);
+    // console.log("Y rate",ballDistanceY < 0);
 
   }
 }
@@ -272,22 +241,42 @@ function detectCollisionBallAndBrick(){
     //   context.clearRect(brick.x,brick.y,brickWidth, brickHeight);
     // }
 
-    // right and left 
+    // collision for all sides of brick (top,bottom, left, right)
     if(
       ballCoordinateX + ballRadius > brick.x && 
       ballCoordinateX - ballRadius < brick.x + brickWidth && 
       ballCoordinateY + ballRadius > brick.y && 
       ballCoordinateY - ballRadius < brick.y + brickHeight) {
-      console.log(brick);
       ballDistanceY*=-1;
       // ballDistanceX*=-1;
       brick.broken = true;
+      //increase score by one
+      // if the current player is 1 then increase player 1 score by 1
+      if(currentPlayer == 1) {
+        scorePlayer1++;
+        // console.log(scorePlayer1);
+        document.querySelector('#playerScore').innerText = scorePlayer1;
+        localStorage.setItem("score player 1", scorePlayer1);
+      }
+      // else if the current player is 2 then increase player 2 score by 1
+      else {
+        scorePlayer2++;
+        document.querySelector('#playerScore').innerText = scorePlayer2;
+        localStorage.setItem("score player 2", scorePlayer2);
+
+      }
       context.clearRect(brick.x,brick.y,brickWidth, brickHeight);
-      console.log("update broken", brick);  
     }
    
     
-  })
+  }) //end of forEach loop
+
+  //draw score on canvas
+  context.font = "20px VT323";
+ 
+  // context.fillText("Score: "+scorePlayer1, 10, 30);
+  // localStorage.setItem('score player1', score);
+  //check if all the bricks have been hit, then the game ends
 let counter =0
 for(let i = 0; i < bricksArray.length ; i++) {
  if(bricksArray[i].broken == true) {
@@ -295,35 +284,45 @@ for(let i = 0; i < bricksArray.length ; i++) {
  }
 
 }
-if(counter == 30) {
+// if all bricks has been hit end the game
+if(counter == numberOfBricks) {
   gameOver()
-}
-
-
-
-// left collision 
-// if(ballCoordinateX + ballRadius > brickCoordinateX && ballCoordinateX - ballRadius > brickCoordinateX + brickWidth) {
-//   ballDistanceX*=-1;
-//   // bricksArray.broken = true;
-//   // if(bricksArray.broken == true) {
-//   //   context.clearRect(bricksArray[0].x,bricksArray[1],y,0,0)
-//   // }
-
-// }
-
-// // right collision 
-// if() {
-//   ballDistanceX*=-1;
-// }
-  // console.log(filteredBrickArray);
+  currentPlayer=2;
+  document.querySelector('#currentPlayer').innerText = currentPlayer;
 
 }
+
+}
+
+// function to calculate the score of the current player
+function calculateScore(scoreOfTheCurrentPlayer) {
+
+}
+
+// function to end the game (stop game from running)
+// function gameOver() {
+//   isGameOn = false
+//   currentPlayer =2;
+
+
+// }
 function gameOver() {
   isGameOn = false
-  // alert("game over");
-    // cancelAnimationFrame(animation)
+  return isGameOn;
+}
+
+// if(gameOver() && currentPlayer == 2){
+//     document.querySelector('#currentPlayer').innerText = currentPlayer;
+//     newGame();
+//   }
+//   // else if(gameOver()){
+//   //     return "nothing"
+//   // }
+if(currentPlayer==2) {
+  // document.location.reload();
+  // cancelAnimationFrame(animate);
+  newGame();
+}
 
 }
 
-
-}

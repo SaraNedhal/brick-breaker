@@ -1,24 +1,48 @@
+body {
+  font-family: 'VT323', monospace;
+  font-size: 30px;
+}
 #gameContainer {
 background-color: lightblue;
-/* position: absolute;
+position: absolute;
 margin: auto;
-top: 0;
+top: 2%;
 bottom: 0;
 left: 0;
-right: 0; */
-display: block;
-margin: 0 auto;
+right: 0;
+/* display: block;
+margin: 0 auto; */
 }
 
 .btn {
-  position: absolute;
-  top: 50%;
+  /* position: absolute;
+  top: 5%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
   text-decoration: none;
   padding:10px;
   background-color: chartreuse;
   font-size: 20px;
   font-weight: bold;
 
+}
+
+/* .player{
+  position: absolute;
+  top: 3%;
+  left: 30%;
+}
+
+.score{
+  position: absolute;
+  top: 3%;
+  left: 0%;
+} */
+
+.playerPanel{
+  display: flex;
+  justify-content: space-between;
+  background-color: green;
+  width: 50%;
+  margin:0 auto;
 }
