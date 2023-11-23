@@ -55,6 +55,9 @@ const brickHeight = 20;
 let brickCoordinateX;
 let brickCoordinateY;
 
+//define variable for players lives
+let playerLives = 2;
+
 //functions
   
 // first draw the ball 
@@ -123,26 +126,13 @@ function gameOver() {
   return isGameOn;
 }
 
-// if(gameOver() && currentPlayer == 2){
-//     document.querySelector('#currentPlayer').innerText = currentPlayer;
-//     newGame();
-//   }
-//   // else if(gameOver()){
-//   //     return "nothing"
-//   // }
-// if(currentPlayer==2) {
-//   // document.location.reload();
-//   // cancelAnimationFrame(animate);
-//   setUp();
-//   newGame();
-// }
+
 
 //setup function to reset the game 
 function setUp(){
    drawBall();
    drawPaddle();
   movePaddle();
-  // currentPlayer=1;
 }// end of setUp() function
 
 //function to start the game

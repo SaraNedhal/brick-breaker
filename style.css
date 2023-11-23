@@ -6,7 +6,7 @@ body {
 background-color: lightblue;
 position: absolute;
 margin: auto;
-top: 2%;
+top: 8%;
 bottom: 0;
 left: 0;
 right: 0;
@@ -45,4 +45,16 @@ margin: 0 auto; */
   background-color: green;
   width: 50%;
   margin:0 auto;
+  padding: 10px;
+}
+
+.lives .playerLives {
+  width:20px;
+  display: inline-block;
+}
+
+
+.livesHidden{
+  display:none;
+  visibility: hidden;
 }
