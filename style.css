@@ -1,19 +1,20 @@
 body {
   font-family: 'VT323', monospace;
   font-size: 30px;
+  background-color: black;
 }
 #gameContainer {
-background-color: lightblue;
+/* background-color: lightblue; */
 position: absolute;
 margin: auto;
 top: 8%;
 bottom: 0;
 left: 0;
 right: 0;
-/* display: block;
-margin: 0 auto; */
+border: 3px solid chartreuse;
+border-radius: 5px;
+/* https://pixelcorners.lukeb.co.uk/?radius=8&multiplier=4 */
 }
-
 .btn {
   /* position: absolute;
   top: 5%;
@@ -57,4 +58,13 @@ margin: 0 auto; */
 .livesHidden{
   display:none;
   visibility: hidden;
+}
+
+.modal{
+  /* display: hidden; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+ 
 }

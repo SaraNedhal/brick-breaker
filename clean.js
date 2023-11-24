@@ -15,7 +15,7 @@ let paddleCoordinateX;
 let paddleCoordinateY;
 const paddleHorizontalMovement = 15;
 let bricksArray;
-const numberOfBricks = 30;
+const numberOfBricks = 40;
 const brickWidth = 80;
 const brickHeight = 20;
 let brickCoordinateX;
@@ -30,28 +30,33 @@ const score = document.querySelector("#playerScore");
 const player = document.querySelector("#currentPlayer");
 const lifeAttempts = document.querySelectorAll(".playerLives");
 
-// if(currentPlayer==2 && playerLives == 0){
-//   checkWinner()
-//   }
+
+// always reset game to original state before starting any game
 resetGame();
+// add click event listener to the start game button to trigger newGame() function to start a new game
 document.querySelector(".btn").addEventListener("click", newGame);
 
+//function to reset game to its original state, including the generation of the bricks x,y coordinates and storing them inside an array
 function resetGame() {
   score.innerText = 0;
   player.innerText = currentPlayer;
   //setting back the number of lives again for the user
   playerLives = 2;
+  //ball  
   ballCoordinateX = containerWidth / 2;
   ballCoordinateY = containerHeight - 55;
   ballDistanceX = 3;
   ballDistanceY = -4;
 
+  //paddle
   paddleCoordinateX = containerWidth / 2 - paddleWidth / 2;
   paddleCoordinateY = containerHeight - 40;
 
+  //bricks
   brickCoordinateX = 15;
   brickCoordinateY = 40;
   bricksArray = [];
+  //data generation for all the bricks x,y coordinates (block positioning on the canvas), and store the data inside an array
   for (let i = 0; i < numberOfBricks; i++) {
     const brick = {
       x: brickCoordinateX,
@@ -61,31 +66,33 @@ function resetGame() {
     bricksArray.push(brick);
     brickCoordinateX = brickCoordinateX + 95;
 
-    if ((i + 1) % 6 == 0) {
+    if ((i + 1) % 8 == 0) {
       brickCoordinateY += 45;
       brickCoordinateX = 15;
     }
   }
-  // document.querySelector(".lives .playerLives").classList.remove("livesHidden");
-}
+}//end of resetGame() function
 
+//function that checks if collision happened between the ball and the canvas border, to ensure the ball doesn't get out of the canvas and moves inside of it
 function detectCollisionBallAndCanvasBorder() {
+  //checks collision for left and right border
   if (
     ballCoordinateX - ballRadius < 0 ||
     ballCoordinateX + ballRadius > containerWidth
   ) {
     ballDistanceX = ballDistanceX * -1;
   }
+  //checks collision for top border
   if (ballCoordinateY + ballDistanceY < 0) {
     ballDistanceY = ballDistanceY * -1;
   }
-
+  //checks collision for bottom border
   if (ballCoordinateY + ballRadius > containerHeight) {
     handleLives();
   }
+}// end of detectCollisionBallAndCanvasBorder() function
 
-}
-
+//function to start a new game 
 function newGame() {
   isGameOn = true;
   requestAnimationFrame(animate);
@@ -202,18 +209,28 @@ function detectCollisionBallAndBrick() {
           document.querySelector("#playerScore").innerText = scorePlayer1;
           localStorage.setItem("scorePlayer1", scorePlayer1);
           //for testing
-         console.log("local storage");
-      for (i = 0; i < localStorage.length; i++)   {
-          console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-      }
+          console.log("local storage");
+          for (i = 0; i < localStorage.length; i++) {
+            console.log(
+              localStorage.key(i) +
+                "=[" +
+                localStorage.getItem(localStorage.key(i)) +
+                "]"
+            );
+          }
         } else {
           scorePlayer2++;
           document.querySelector("#playerScore").innerText = scorePlayer2;
-         localStorage.setItem("scorePlayer2", scorePlayer2);
-        //for testing
-         for (i = 0; i < localStorage.length; i++)   {
-          console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-      }
+          localStorage.setItem("scorePlayer2", scorePlayer2);
+          //for testing
+          for (i = 0; i < localStorage.length; i++) {
+            console.log(
+              localStorage.key(i) +
+                "=[" +
+                localStorage.getItem(localStorage.key(i)) +
+                "]"
+            );
+          }
         }
         context.clearRect(brick.x, brick.y, brickWidth, brickHeight);
       }
@@ -227,9 +244,9 @@ function detectCollisionBallAndBrick() {
     }
   }
 
-  // if (counter == numberOfBricks) {
-  //   gameOver();
-  // }
+  if (counter == numberOfBricks) {
+    handleLives();
+  }
 }
 
 function movePaddle(event) {
@@ -259,12 +276,12 @@ function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle) {
 }
 
 function handleLives() {
-  if(playerLives==2){
-  lifeAttempts[1].classList.add("livesHidden");
-  playerLives--;                                                                       
-  }else{
+  if (playerLives == 2) {
+    lifeAttempts[1].classList.add("livesHidden");
+    playerLives--;
+  } else {
     lifeAttempts[0].classList.add("livesHidden");
-    playerLives--; 
+    playerLives--;
   }
   let count = 0;
   for (let i = 0; i < bricksArray.length; i++) {
@@ -272,28 +289,26 @@ function handleLives() {
       count++;
     }
   }
-  console.log("the count",count)
-  console.log("player lives:", playerLives)
+  console.log("the count", count);
+  console.log("player lives:", playerLives);
+  // if all lives are done or all bricks numbers are finished then switch players
   if (playerLives == 0 || count == numberOfBricks) {
     if (currentPlayer == 1) {
       currentPlayer = 2;
-      scorePlayer1=0;
-      document.querySelector('#currentPlayer').innerText = 2;
+      scorePlayer1 = 0;
+      document.querySelector("#currentPlayer").innerText = 2;
     } else {
-        checkWinner()
+      checkWinner();
       currentPlayer = 1;
-      // scorePlayer2=0;
-      document.querySelector('#currentPlayer').innerText = 1;
+      scorePlayer2=0;
+      document.querySelector("#currentPlayer").innerText = 1;
     }
     resetGame();
     lifeAttempts[0].classList.remove("livesHidden");
     lifeAttempts[1].classList.remove("livesHidden");
     // localStorage.clear()
-    
   } else {
-   
     isGameOn = false;
-
 
     ballCoordinateX = containerWidth / 2;
     ballCoordinateY = containerHeight - 55;
@@ -301,15 +316,16 @@ function handleLives() {
   }
 }
 
-
+// const modal = document.querySelector('.modal');
 function checkWinner() {
-let playerScore1= parseInt(localStorage.getItem("scorePlayer1"));
-let playerScore2= parseInt(localStorage.getItem("scorePlayer2"));
-if(playerScore1 > playerScore2){
- alert("player 1 won");
-}else if(playerScore2> playerScore1){
-  alert("player 2 won");
-}else{
-  alert("ita a tie !");
-}
+  let playerScore1 = parseInt(localStorage.getItem("scorePlayer1"));
+  let playerScore2 = parseInt(localStorage.getItem("scorePlayer2"));
+  if (playerScore1 > playerScore2) {
+    alert("player 1 won");
+
+  } else if (playerScore2 > playerScore1) {
+    alert("player 2 won");
+  } else {
+    alert("ita a tie !");
+  }
 }
