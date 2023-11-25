@@ -32,13 +32,21 @@ const score = document.querySelector("#playerScore");
 const player = document.querySelector("#currentPlayer");
 const lifeAttempts = document.querySelectorAll(".playerLives");
 const brickAudio = new Audio('./mixkit-retro-game-notification-212.wav');
+const gameOverAudio = new Audio('./mixkit-arcade-retro-background-219.wav');
 
-
+// function startGame(){
+  // context.clearRect(0, 0, containerWidth, containerHeight);
+context.font = "80px VT323";
+context.fillStyle = "white";
+context.fillText("BRICK BREAKER",  200, 200);
+context.font = "30px VT323";
+context.fillText("Press the 'start game' button to start the game",  125, 300);
+// context.fillText("Current Player: " + currentPlayer,  300, 370);
+// }
 // always reset game to original state before starting any game
 resetGame();
 // add click event listener to the start game button to trigger newGame() function to start a new game
 document.querySelector(".btn").addEventListener("click", newGame);
-
 //function to reset game to its original state, including the generation of the bricks x,y coordinates and storing them inside an array
 function resetGame() {
   score.innerText = 0;
@@ -123,7 +131,7 @@ function drawBricks() {
       return "nothing";
     }
     context.beginPath();
-    context.fillStyle = "blue";
+    context.fillStyle = "#0366ff ";
     context.fillRect(element.x, element.y, brickWidth, brickHeight);
     context.fill();
     context.closePath();
@@ -131,7 +139,7 @@ function drawBricks() {
 }
 //function used to draw paddle
 function drawPaddle() {
-  context.fillStyle = "green";
+  context.fillStyle = "#66ff03";
   context.fillRect(
     paddleCoordinateX,
     paddleCoordinateY,
@@ -140,7 +148,7 @@ function drawPaddle() {
   );
 }
 function drawBall() {
-  context.fillStyle = "red";
+  context.fillStyle = "#ff0366";
   context.beginPath();
   // arc() accepts 5 arguments (x coordinate,y coordinate, circle radius, start angel, end angle)
   // x-> ball must be centered horizontally on the x axis (thus, containerWidth/ , and on Y axis i dont want the ball to be placed at the bottom of the canvas so i subtracted the height to value i found it suitable ), for ball radius is stored as a variable and hold the value 15 ,start drawing at angle 0 and do a 360deg meaning a full circle hence Math.PI *2
@@ -268,6 +276,7 @@ function handleLives() {
     if (currentPlayer == 1) {
       currentPlayer = 2;
       scorePlayer1 = 0;
+      isGameOn= false;
       document.querySelector("#currentPlayer").innerText = 2;
     } else {
       checkWinner();
@@ -290,7 +299,7 @@ function handleLives() {
 
 function checkWinner() {
   isGameOn = false;
-
+  gameOverAudio.play();
   let playerScore1 = parseInt(localStorage.getItem("scorePlayer1"));
   let playerScore2 = parseInt(localStorage.getItem("scorePlayer2"));
   context.clearRect(0, 0, containerWidth, containerHeight);
@@ -312,7 +321,7 @@ function checkWinner() {
     context.fillText("PLAYER 2 WINS!", 270, 350);   
     localStorage.clear();
   } else {
-    context.fillText("TIE!", 360, 350);  
+    context.fillText("TIE!", 370, 350);  
     localStorage.clear();  
   }
 

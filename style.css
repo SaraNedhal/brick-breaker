@@ -7,46 +7,33 @@ body {
 /* background-color: lightblue; */
 position: absolute;
 margin: auto;
-top: 8%;
+top: 12%;
 bottom: 0;
 left: 0;
 right: 0;
-border: 3px solid chartreuse;
+border: 3px solid rgb(204, 255, 101);
 border-radius: 5px;
-/* https://pixelcorners.lukeb.co.uk/?radius=8&multiplier=4 */
 }
 .btn {
-  /* position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
+  
   text-decoration: none;
   padding:10px;
-  background-color: chartreuse;
-  font-size: 20px;
-  font-weight: bold;
+  background-color: rgb(87, 169, 87);
+  font-size: 22px;
+  border-radius: 3px;
+  color: rgb(231, 247, 4);
 
 }
 
-/* .player{
-  position: absolute;
-  top: 3%;
-  left: 30%;
-}
-
-.score{
-  position: absolute;
-  top: 3%;
-  left: 0%;
-} */
 
 .playerPanel{
   display: flex;
   justify-content: space-between;
-  background-color: green;
   width: 62%;
   margin:0 auto;
   padding: 10px;
+  color:white;
+  margin-top: 15px;
 }
 
 .lives .playerLives {
@@ -60,11 +47,3 @@ border-radius: 5px;
   visibility: hidden;
 }
 
-.modal{
-  /* display: hidden; */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
- 
-}
