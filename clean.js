@@ -13,7 +13,8 @@ const paddleWidth = 150;
 const paddleHeight = 20;
 let paddleCoordinateX;
 let paddleCoordinateY;
-const paddleHorizontalMovement = 15;
+const paddleHorizontalMovement = 18;
+
 let bricksArray;
 const numberOfBricks = 40;
 const brickWidth = 80;
@@ -26,9 +27,11 @@ let currentPlayer = 1;
 let scorePlayer1 = 0;
 let scorePlayer2 = 0;
 let playerLives = 2;
+
 const score = document.querySelector("#playerScore");
 const player = document.querySelector("#currentPlayer");
 const lifeAttempts = document.querySelectorAll(".playerLives");
+const brickAudio = new Audio('./mixkit-retro-game-notification-212.wav');
 
 
 // always reset game to original state before starting any game
@@ -53,7 +56,7 @@ function resetGame() {
   paddleCoordinateY = containerHeight - 40;
 
   //bricks
-  brickCoordinateX = 15;
+  brickCoordinateX = 25;
   brickCoordinateY = 40;
   bricksArray = [];
   //data generation for all the bricks x,y coordinates (block positioning on the canvas), and store the data inside an array
@@ -68,7 +71,7 @@ function resetGame() {
 
     if ((i + 1) % 8 == 0) {
       brickCoordinateY += 45;
-      brickCoordinateX = 15;
+      brickCoordinateX = 25;
     }
   }
 }//end of resetGame() function
@@ -149,37 +152,6 @@ function moveBall() {
   ballCoordinateY += ballDistanceY;
 }
 
-// function detectCollisionBallAndCanvasBorder() {
-//   if (
-//     ballCoordinateX + ballDistanceX < 0 ||
-//     ballCoordinateX + ballDistanceX > containerWidth - ballRadius
-//   ) {
-//     ballDistanceX = ballDistanceX * -1;
-//   }
-//   if (ballCoordinateY + ballDistanceY < 0) {
-//     ballDistanceY = ballDistanceY * -1;
-//   }
-
-//   if (ballCoordinateY + ballRadius > containerHeight) {
-//     console.log("player life before start: ", playerLives);
-//     // playerLives--;
-//     console.log("player life after start: ", playerLives);
-//     //   // document.querySelector(".lives .playerLives").classList.add("livesHidden");
-//     //   let count = 0;
-//     //   for (let i = 0; bricksArray.length; i++) {
-//     //     if (bricksArray[i].broken == true) {
-//     //       count++;
-//     //     }
-//     //   }
-//     //   if (playerLives == 0 || count == numberOfBricks) {
-//     //     gameOver();
-//     //     setUp();
-//     //     newGame();
-//     //   }
-//     // } else {
-//       handleLives();
-//   }
-// }
 function detectCollisionBallAndPaddle() {
   if (
     ballCoordinateX + ballRadius >= paddleCoordinateX &&
@@ -202,6 +174,7 @@ function detectCollisionBallAndBrick() {
         ballCoordinateY + ballRadius > brick.y &&
         ballCoordinateY - ballRadius < brick.y + brickHeight
       ) {
+        brickAudio.play();
         ballDistanceY *= -1;
         brick.broken = true;
         if (currentPlayer == 1) {
@@ -235,7 +208,6 @@ function detectCollisionBallAndBrick() {
         context.clearRect(brick.x, brick.y, brickWidth, brickHeight);
       }
     });
-  context.font = "20px VT323";
 
   let counter = 0;
   for (let i = 0; i < bricksArray.length; i++) {
@@ -316,16 +288,32 @@ function handleLives() {
   }
 }
 
-// const modal = document.querySelector('.modal');
 function checkWinner() {
+  isGameOn = false;
+
   let playerScore1 = parseInt(localStorage.getItem("scorePlayer1"));
   let playerScore2 = parseInt(localStorage.getItem("scorePlayer2"));
+  context.clearRect(0, 0, containerWidth, containerHeight);
+  context.font = "80px VT323";
+  context.fillStyle = "white";
+  context.fillText("BRICK BREAKER",  200, 100);
+  context.font = "65px VT323";
+  context.fillText("Scores",  325, 170);
+  context.font = "50px VT323";
+  context.fillText("Player 1: " + playerScore1, 100, 250);
+  context.fillText("Player 2: " +playerScore2, 480, 250);
   if (playerScore1 > playerScore2) {
-    alert("player 1 won");
+    // alert("player 1 won");
+    context.fillText("PLAYER 1 WINS!", 270, 350);
+    localStorage.clear();
 
   } else if (playerScore2 > playerScore1) {
-    alert("player 2 won");
+    // alert("player 2 won");
+    context.fillText("PLAYER 2 WINS!", 270, 350);   
+    localStorage.clear();
   } else {
-    alert("ita a tie !");
+    context.fillText("TIE!", 360, 350);  
+    localStorage.clear();  
   }
+
 }
