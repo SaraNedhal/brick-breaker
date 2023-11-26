@@ -1,5 +1,5 @@
 # brick-breaker
-brick breaker is game inspired from the 60's game called breakout.
+brick breaker is game inspired from the 70's game called breakout.
 the concept of the game is simple, you have ball placed in top of a paddle and set of bricks.
 
 # Rules:
