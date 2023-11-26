@@ -14,10 +14,10 @@ each player will have 2 lives (chances) to destroy all the bricks.
 this game is developed using HTML/CSS/Javascript, mainly using canvas tag in html and using context which is a 2D rendering context for the drawing surface of a <canvas> element to draw all the shapes using javascript
 
 # Screenshots of the game:
-<img width="683" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/fa2552de-02bf-4fd2-b173-d3a760599448">
+<img width="654" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/fa2552de-02bf-4fd2-b173-d3a760599448">
 <img width="654" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/6b48fe45-2abf-4166-98fc-d74edbd0e497">
-<img width="671" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/2dcc8cb3-1853-4d92-bc85-4e2345571d5d">
-<img width="663" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/5680384b-62a5-45d6-b9da-225d9ef9b78e">
+<img width="654" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/2dcc8cb3-1853-4d92-bc85-4e2345571d5d">
+<img width="654" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/5680384b-62a5-45d6-b9da-225d9ef9b78e">
 
 # Future Features:
 1. Adding levels to the game
