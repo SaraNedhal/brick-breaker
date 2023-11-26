@@ -189,6 +189,7 @@ function detectCollisionBallAndPaddle() {
     ballCoordinateY + ballRadius >= paddleCoordinateY &&
     ballCoordinateY - ballRadius <= paddleCoordinateY + paddleHeight
   ) {
+    // the ball will be inside the paddle, to give it a little push i will subtract the -5 based on dy of the circle -4 from the y coordinate of the ball just to give it a little push out of the paddle
     ballCoordinateY += -5;
     ballDistanceY = ballDistanceY * -1;
   }
