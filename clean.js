@@ -282,6 +282,7 @@ function movePaddle(event) {
   }
 }
 
+//function that checks if the paddle is out of border takes the current x coordinate od the paddle as parameter 
 function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle) {
   return (
     horizontalCoordinateOfPaddle < 0 ||
@@ -289,7 +290,9 @@ function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle) {
   );
 }
 
+//function that handles lives and switching players
 function handleLives() {
+  //remove the hurts when the ball fall of the paddle
   if (playerLives == 2) {
     lifeAttempts[1].classList.add("livesHidden");
     playerLives--;
@@ -297,6 +300,7 @@ function handleLives() {
     lifeAttempts[0].classList.add("livesHidden");
     playerLives--;
   }
+  //loop to check how many bricks has been destroyed
   let count = 0;
   for (let i = 0; i < bricksArray.length; i++) {
     if (bricksArray[i].broken == true) {
@@ -305,24 +309,29 @@ function handleLives() {
   }
   console.log("the count", count);
   console.log("player lives:", playerLives);
-  // if all lives are done or all bricks numbers are finished then switch players
+  // if all lives are done or all bricks numbers are destroyed then switch players
   if (playerLives == 0 || count == numberOfBricks) {
+    //if player =1 switch to player 2, pause the game and change all related info on the screen
     if (currentPlayer == 1) {
       currentPlayer = 2;
       scorePlayer1 = 0;
       isGameOn= false;
       document.querySelector("#currentPlayer").innerText = 2;
     } else {
+      //if player 2 then display score of both players and winner
       checkWinner();
+      // switch to player 1 and change all related info on the screen
       currentPlayer = 1;
       scorePlayer2=0;
       document.querySelector("#currentPlayer").innerText = 1;
     }
+    //for both players switch, reset the game to its original state 
     resetGame();
     lifeAttempts[0].classList.remove("livesHidden");
     lifeAttempts[1].classList.remove("livesHidden");
     // localStorage.clear()
   } else {
+    //if the lives not equal to zero (there are still some lives left for the player), pause the game and ONLY reset the ball and paddle to its original state
     isGameOn = false;
 
     ballCoordinateX = containerWidth / 2;
@@ -331,12 +340,17 @@ function handleLives() {
   }
 }
 
+//function to display the score and check who's the winner
 function checkWinner() {
+  //pause the game after player 2 finishes the game
   isGameOn = false;
   gameOverAudio.play();
+  // take the scores from local storage and store them in variables
   let playerScore1 = parseInt(localStorage.getItem("scorePlayer1"));
   let playerScore2 = parseInt(localStorage.getItem("scorePlayer2"));
+  //clear canvas
   context.clearRect(0, 0, containerWidth, containerHeight);
+  //write the player scores on screen
   context.font = "80px VT323";
   context.fillStyle = "white";
   context.fillText("BRICK BREAKER",  200, 100);
@@ -345,6 +359,8 @@ function checkWinner() {
   context.font = "50px VT323";
   context.fillText("Player 1: " + playerScore1, 100, 250);
   context.fillText("Player 2: " +playerScore2, 480, 250);
+
+  //check who's score is higher to display who won and then clear the players score from the local storage
   if (playerScore1 > playerScore2) {
     // alert("player 1 won");
     context.fillText("PLAYER 1 WINS!", 270, 350);
