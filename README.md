@@ -21,5 +21,9 @@ this game is developed using HTML/CSS/Javascript, mainly using canvas tag in htm
 # Future Features:
 1. Adding levels to the game
 2. Add enhancement to the paddle (new features)
+3. responsive layout
+
+ # Audio:
+ https://mixkit.co/free-sound-effects/arcade/
 
 
