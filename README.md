@@ -3,7 +3,7 @@ brick breaker is game inspired from the 70's game called breakout.
 the concept of the game is simple, you have ball placed in top of a paddle and set of bricks. The goal is to destroy all the bricks without letting the ball off the paddle.
 # How to play:
 in this version of brick breaker, there will be 2 player.
-  <br> Player 1 (Human) VS.  Player 2 (Human)
+  <br> Player 1 (Human) VS.  Player 2 (Human) <br>
 it is considered to be a hot seat game, where player one starts their game and when they finish player 2 will start their session, after that the two players score will be shown on the screen.
    1. Player 1 has to click on the "start game" button <img width="127" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/576b6049-d92d-4d76-a2aa-1cf9f83a103c"> and then the game will start.
    2. 
