@@ -16,7 +16,7 @@ const paddleWidth = 150;
 const paddleHeight = 20;
 let paddleCoordinateX;
 let paddleCoordinateY;
-const paddleHorizontalMovement = 18;
+const paddleHorizontalMovement = 40;
 
 //brick info
 let bricksArray;
@@ -41,21 +41,21 @@ const player = document.querySelector("#currentPlayer");
 const lifeAttempts = document.querySelectorAll(".playerLives");
 
 //store the brick breaking and game over audio's in variables
-const brickAudio = new Audio('./mixkit-retro-game-notification-212.wav');
-const gameOverAudio = new Audio('./mixkit-arcade-retro-background-219.wav');
-
-//Writing the intro of the game on the canvas 
+const brickAudio = new Audio("./mixkit-retro-game-notification-212.wav");
+const gameOverAudio = new Audio("./mixkit-arcade-retro-background-219.wav");
+document.addEventListener("DOMContentLoaded", function(){
+//Writing the intro of the game on the canvas
 context.font = "80px VT323";
 context.fillStyle = "white";
-context.fillText("BRICK BREAKER",  200, 200);
+context.fillText("BRICK BREAKER", 200, 200);
 context.font = "30px VT323";
-context.fillText("Press the 'start game' button to start the game",  125, 300);
+context.fillText("Press the 'start game' button to start the game", 125, 300);
 
 // always reset game to original state before starting any game
 resetGame();
 // add click event listener to the start game button to trigger newGame() function to start a new game
 document.querySelector(".btn").addEventListener("click", newGame);
-
+})
 //function to reset game to its original state, including the generation of the bricks x,y coordinates and storing them inside an array
 function resetGame() {
   //setting back the score to zero and the current player to 1 into the screen
@@ -77,7 +77,7 @@ function resetGame() {
   brickCoordinateX = 25;
   brickCoordinateY = 40;
   bricksArray = [];
-  //data generation for all the bricks x,y coordinates (brick positioning on the canvas), and store the data inside an array (array of objects) through a loop 
+  //data generation for all the bricks x,y coordinates (brick positioning on the canvas), and store the data inside an array (array of objects) through a loop
   for (let i = 0; i < numberOfBricks; i++) {
     const brick = {
       x: brickCoordinateX,
@@ -94,7 +94,7 @@ function resetGame() {
       brickCoordinateX = 25;
     }
   }
-}//end of resetGame() function
+} //end of resetGame() function
 
 //function that checks if collision happened between the ball and the canvas border, to ensure the ball doesn't get out of the canvas and moves inside of it
 function detectCollisionBallAndCanvasBorder() {
@@ -113,15 +113,15 @@ function detectCollisionBallAndCanvasBorder() {
   if (ballCoordinateY + ballRadius > containerHeight) {
     handleLives();
   }
-}// end of detectCollisionBallAndCanvasBorder() function
+} // end of detectCollisionBallAndCanvasBorder() function
 
-//function to start a new game 
+//function to start a new game
 function newGame() {
   //game is on, so start rendering frames for animation and add an event listener on the keys to track keyboard arrows movement to move the paddle right or left
   isGameOn = true;
   requestAnimationFrame(animate);
   document.addEventListener("keydown", movePaddle);
-}// end of newGame() function
+} // end of newGame() function
 
 // function used for animation
 function animate() {
@@ -140,7 +140,7 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-// function to take the coordinates from the array that has added x,y coordinate of each brick inside the resetGame() function and paint the bricks on the canvas 
+// function to take the coordinates from the array that has added x,y coordinate of each brick inside the resetGame() function and paint the bricks on the canvas
 function drawBricks() {
   // loop through the array if broken property equal true dont paint the brick because it has been destroyed via ball
   bricksArray.forEach(function (element) {
@@ -165,7 +165,7 @@ function drawPaddle() {
     paddleHeight
   );
 }
-//function used to draw the ball 
+//function used to draw the ball
 function drawBall() {
   context.fillStyle = "#ff0366";
   context.beginPath();
@@ -182,7 +182,7 @@ function moveBall() {
 
 //function to check if collision occurred between ball and paddle
 function detectCollisionBallAndPaddle() {
- // to check left, right, top, bottom collision
+  // to check left, right, top, bottom collision
   if (
     ballCoordinateX + ballRadius >= paddleCoordinateX &&
     ballCoordinateX - ballRadius <= paddleCoordinateX + paddleWidth &&
@@ -201,7 +201,7 @@ function detectCollisionBallAndBrick() {
   bricksArray
     .filter((brick) => !brick.broken)
     .forEach((brick) => {
-      //check collision on the left, right.top ,bottom 
+      //check collision on the left, right.top ,bottom
       if (
         ballCoordinateX + ballRadius > brick.x &&
         ballCoordinateX - ballRadius < brick.x + brickWidth &&
@@ -216,7 +216,7 @@ function detectCollisionBallAndBrick() {
         brick.broken = true;
         // if the current player is 1
         if (currentPlayer == 1) {
-          //add 1 to the score if the brick got hit by the ball 
+          //add 1 to the score if the brick got hit by the ball
           scorePlayer1++;
           //change the score on the screen and store the value in local storage
           document.querySelector("#playerScore").innerText = scorePlayer1;
@@ -232,9 +232,9 @@ function detectCollisionBallAndBrick() {
             );
           }
         } else {
-                  // if the current player is 2
+          // if the current player is 2
           scorePlayer2++;
-                    //change the score on the screen and store the value in local storage
+          //change the score on the screen and store the value in local storage
           document.querySelector("#playerScore").innerText = scorePlayer2;
           localStorage.setItem("scorePlayer2", scorePlayer2);
           //for testing
@@ -251,14 +251,14 @@ function detectCollisionBallAndBrick() {
         context.clearRect(brick.x, brick.y, brickWidth, brickHeight);
       }
     });
-    //loop to check how many bricks are broken, done by counting the number of bricks that has the property of true
+  //loop to check how many bricks are broken, done by counting the number of bricks that has the property of true
   let counter = 0;
   for (let i = 0; i < bricksArray.length; i++) {
     if (bricksArray[i].broken == true) {
       counter++;
     }
   }
-  // if the player destroyed all the bricks, call handleLives() 
+  // if the player destroyed all the bricks, call handleLives()
   if (counter == numberOfBricks) {
     handleLives();
   }
@@ -283,11 +283,11 @@ function movePaddle(event) {
   }
 }
 
-//function that checks if the paddle is out of border takes the current x coordinate od the paddle as parameter 
+//function that checks if the paddle is out of border takes the current x coordinate od the paddle as parameter
 function isPaddleOutOfCanvas(horizontalCoordinateOfPaddle) {
   return (
-    horizontalCoordinateOfPaddle < 0 ||
-    horizontalCoordinateOfPaddle + paddleWidth > containerWidth
+    horizontalCoordinateOfPaddle <= 0 ||
+    horizontalCoordinateOfPaddle + paddleWidth >= containerWidth
   );
 }
 
@@ -316,17 +316,17 @@ function handleLives() {
     if (currentPlayer == 1) {
       currentPlayer = 2;
       scorePlayer1 = 0;
-      isGameOn= false;
+      isGameOn = false;
       document.querySelector("#currentPlayer").innerText = 2;
     } else {
       //if player 2 then display score of both players and winner
       checkWinner();
       // switch to player 1 and change all related info on the screen
       currentPlayer = 1;
-      scorePlayer2=0;
+      scorePlayer2 = 0;
       document.querySelector("#currentPlayer").innerText = 1;
     }
-    //for both players switch, reset the game to its original state 
+    //for both players switch, reset the game to its original state
     resetGame();
     lifeAttempts[0].classList.remove("livesHidden");
     lifeAttempts[1].classList.remove("livesHidden");
@@ -354,26 +354,24 @@ function checkWinner() {
   //write the player scores on screen
   context.font = "80px VT323";
   context.fillStyle = "white";
-  context.fillText("BRICK BREAKER",  200, 100);
+  context.fillText("BRICK BREAKER", 200, 100);
   context.font = "65px VT323";
-  context.fillText("Scores",  325, 170);
+  context.fillText("Scores", 325, 170);
   context.font = "50px VT323";
   context.fillText("Player 1: " + playerScore1, 100, 250);
-  context.fillText("Player 2: " +playerScore2, 480, 250);
+  context.fillText("Player 2: " + playerScore2, 480, 250);
 
   //check who's score is higher to display who won and then clear the players score from the local storage
   if (playerScore1 > playerScore2) {
     // alert("player 1 won");
     context.fillText("PLAYER 1 WINS!", 270, 350);
     localStorage.clear();
-
   } else if (playerScore2 > playerScore1) {
     // alert("player 2 won");
-    context.fillText("PLAYER 2 WINS!", 270, 350);   
+    context.fillText("PLAYER 2 WINS!", 270, 350);
     localStorage.clear();
   } else {
-    context.fillText("TIE!", 370, 350);  
-    localStorage.clear();  
+    context.fillText("TIE!", 370, 350);
+    localStorage.clear();
   }
-
 }
