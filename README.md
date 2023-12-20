@@ -1,16 +1,31 @@
-# brick-breaker
+# Brick Breaker
 brick breaker is game inspired from the 70's game called breakout.
 the concept of the game is simple, you have ball placed in top of a paddle and set of bricks. The goal is to destroy all the bricks without letting the ball off the paddle.
-# How to play:
-in this version of brick breaker, there will be 2 player.
-  <br> Player 1 (Human) VS.  Player 2 (Human) <br>
-it is considered to be a hot seat game, where player one starts their game and when they finish player 2 will start their session, after that the two players score will be shown on the screen.
-   1. Player 1 has to click on the "start game" button <img width="127" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/576b6049-d92d-4d76-a2aa-1cf9f83a103c"> and then the game will start.
-   2. 
 
-# Rules:
-the game is a hot seat game, where player 1 plays then player 2 after that a score of both players will be shown on the canvas with who's winning 
-each player will have 2 lives (chances) to destroy all the bricks.
+# Getting Started
+1. Click on the "Start Game" button <img width="127" alt="image" src="https://github.com/SaraNedhal/brick-breaker/assets/100535445/576b6049-d92d-4d76-a2aa-1cf9f83a103c"> to initiate the game.
+2. Use the right and left arrow keys to move the paddle right or left, respectively.
+3. Each player starts with 2 lives. Lose a life when the ball falls off the paddle.
+4. The game switches to the next player when either:
+   <ul>
+        <li> Both players' lives are exhausted.</li>
+        <li> A player destroys all the bricks.</li>
+   </ul>
+5. After both players finish their sessions, the scores will be displayed to determine the winner.
+
+# Game Controls
+<ul>
+<li>Right Arrow: Move paddle to the right.</li>
+<li>Left Arrow: Move paddle to the left.</li>
+</ul>
+
+# Game Flow
+1. Player 1 starts the game.
+2. Player 2 takes over when Player 1 loses all lives or destroys all bricks.
+3. After both players finish, the scores are displayed to determine the winner.
+   
+# Winning
+The player with the highest score at the end of both sessions is declared the winner.
 
 # User story:
 1. As a gamer, i wanted to play a game from the past, i always enjoyed arcade games and brick breaker is one of the games that i have always played in my free time.
